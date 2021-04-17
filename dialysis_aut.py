@@ -8,9 +8,10 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
 
 from selenium.common.exceptions import NoSuchElementException
-
+from webdriver_manager.chrome import ChromeDriverManager
 # functions
 
 def check_exists_by_xpath(xpath):
@@ -25,7 +26,7 @@ def check_exists_by_xpath(xpath):
 
 options = webdriver.ChromeOptions()
 options.add_argument('--disable-notifications')
-driver = webdriver.Chrome(executable_path="chromedriver.exe",options=options)
+driver = webdriver.Chrome(ChromeDriverManager().install(),options=options)
 driver.maximize_window()
 
 driver.implicitly_wait(10)
@@ -37,9 +38,9 @@ w = WebDriverWait(driver,8)
 
 driver.get('https://pmjaylive.sevensigma.in/home')
 
-user_name = driver.find_element_by_xpath('/html/body/div/div[2]/div/div/div[1]/div/div/form/div/div[2]/div[1]/input')
+user_name = driver.find_element_by_name('User Name')
 user_name.send_keys(8590050640)
-password = driver.find_element_by_xpath('/html/body/div/div[2]/div/div/div[1]/div/div/form/div/div[2]/div[2]/input')
+password = driver.find_element_by_name('Password')
 password.send_keys(50640)
 driver.find_element_by_xpath('/html/body/div/div[2]/div/div/div[1]/div/div/form/div/div[3]/button').click()
 sleep(3)
@@ -50,7 +51,7 @@ sleep(3)
 
 
 preauth = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[2]/div[2]/a/div/div[1]/div/div[2]/div/p[1]').click()
-sleep(10)
+sleep(3)
 
 driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div/div/div/input').send_keys('DIALYSIS')
 sleep(25)
@@ -70,15 +71,17 @@ treatment_d = treat_date.get_attribute('innerHTML')
 print("treatment_d",treatment_d)
 # tmp_rate = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[4]/p[2]')
 # tmp_rt = tmp_rate.get_attribute('innerattribute')
-pulse_rate = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[6]/div')
-pulse_rt = pulse_rate.get_attribute('innerHTML')
-print(pulse_rt)
-x = pulse_rt[:3]
+pulse_rate = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[3]/p[2]')
+pulse = pulse_rate.get_attribute('innerHTML')
+print(pulse)
+x = pulse[:3]
 print(x)
-y = pulse_rt[4:6]
+y = pulse[4:6]
 print(y)
 
-
+# p_p = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
+# action = ActionChains(driver)
+# action.context_click(p_p).key_down (Keys.SHIFT).perform()
 
 
 
@@ -137,7 +140,7 @@ try:
     Ipop = driver.find_element_by_id('submitIpOp')
     Ipop.click()
     sleep(3)
-    ok = driver.find_element_by_xpath('/html/body/div[25]/div/div/div[2]/button[2]')
+    ok = driver.find_element_by_xpath('/html/body/div[26]/div/div/div[2]/button[2]')
     ok.click()
     sleep(5)
     print('try')
@@ -189,21 +192,22 @@ except:
     pass
 
 
+try:
+    close_b = w.until(
+        expected_conditions.presence_of_element_located((By.XPATH, '/html/body/div[18]/div/div/div[3]/button')))
 
-close_b = w.until(expected_conditions.presence_of_element_located((By.XPATH,"/html/body/div[18]/div/div/div[3]/button")))
-# close_b = driver.find_element_by_xpath('/html/body/div[18]/div/div/div[3]/button')
-close_b.click()
-sleep(3)
-# upload = driver.find_element_by_xpath('/html/body/form/div/div/div/label')
-# upload.send_keys(r'C:\Users\PC\Downloads\KASP-PMJAY_files\PREDIALYSISxPHOTO_IBRAHIM_PS8VO3JD0_99_50_23124_20210407_123113_26\JPEG File (.jpeg')
-
-# photo = driver.find_element_by_id('invAttach')
-# driver.execute_script('arguments[0].style.display="block";',photo)
-# sleep(3)
-#
-# upload = driver.find_element_by_xpath('//*[@id="invAttach"]')
-
-# upload.send_keys(r'C:\Users\PC\Downloads\KASP-PMJAY_files\PREDIALYSISxPHOTO_IBRAHIM_PS8VO3JD0_99_50_23124_20210407_123113_26\JPEG File (.jpeg)')
+    close_b.click()
+    sleep(3)
+    driver.switch_to.frame(driver.find_element_by_xpath('//*[@id="iframe1"]'))
+    upload = driver.find_element_by_xpath('//*[@id="invAttach"]')
+    upload.send_keys(r'C:\Users\PC\Downloads\gopalakrishna_ss1.jpeg')
+    driver.switch_to.default_content()
+    sleep(2)
+    driver.switch_to.frame(driver.find_element_by_id('iframe2'))
+    upload_p = driver.find_element_by_xpath('//*[@id="invattachButton"]')
+    upload_p.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx2_GOPALAKRISHNA.xH.jpeg')
+except:
+    pass
 ip_no = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]/input')
 ip_no.send_keys(ip_num)
 
@@ -216,12 +220,12 @@ drop = Select(diagnosed_by)
 drop.select_by_visible_text('Others')
 doctor_name = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[3]/div[2]/div[1]/input')
 doctor_name.send_keys('DR PRADEEP K J')
-procedure_con = driver.find_element_by_xpath('//*[@id="procedureConsent"]')
-procedure_con.click()
-MLC = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[4]/div[1]/input[2]')
-MLC.click()
-driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[3]/div[3]/input').click()
-sleep(3)
+# procedure_con = driver.find_element_by_xpath('//*[@id="procedureConsent"]')
+# procedure_con.click()
+# MLC = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[4]/div[1]/input[2]')
+# MLC.click()
+# driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[3]/div[3]/input').click()
+# sleep(3)
 
 alldate = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[3]/div[3]/input')
 print(treatment_d)
@@ -276,83 +280,19 @@ close_save = driver.find_element_by_xpath('/html/body/div[8]/div/div/div[3]/butt
 close_save.click()
 sleep(2)
 
-ad_v = driver.find_element_by_id('btnattach')
-ad_v.click()
-sleep(5)
-el =  driver.find_element_by_id("addTests")
-try: driver.execute_script("return arguments[0].scrollIntoView(true);",el)
-except:pass
-sleep(3)
-txt =driver.find_element_by_xpath('/html/body/div[3]/form/div[4]/div[1]/div[2]/section/table/tbody[6]/tr/td[3]/div/div[2]/input').send_keys("filenamehere")
-sleep(5)
-
-
-# up_load = driver.find_element_by_xpath('/html/body/div[3]/form/div[4]/div[1]/div[2]/section/table/tbody[6]/tr/td[3]/div/div[3]/label/input').click()
-x=driver.find_element_by_xpath("/html/body/div[3]/form/div[4]/div[1]/div[2]/section/table/tbody[6]/tr/td[3]/div/div[3]/label/input")
-driver.execute_script("arguments[0].style.display = 'block';",x)
-sleep(5)
-x.send_keys("")
-
-sleep(5)
-wok= driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/button')
+action_typ = driver.find_element_by_id('actionType')
+drop = Select(action_typ)
+drop.select_by_visible_text('Initiate Pre-auth')
 sleep(2)
-next=driver.find_element_by_xpath('/html/body/div[3]/form/div[4]/div[2]/a[2]').click()
+
+add_view = driver.find_element_by_id('btnattach')
+add_view.click()
+driver.switch_to.frame(driver.find_element_by_name('btframe'))
+sleep(5)
+driver.find_element_by_xpath('//*[@id="uploadBPM"]').send_keys(r'C:\Users\PC\Downloads\PREDIALYSISxPHOTO_VIJAYAxRAJAN_PBIQUVEX5_99_50_23430_20210410_180416_17.jpeg')
 sleep(2)
-next =driver.find_element_by_xpath('/html/body/div[3]/form/div[4]/div[2]/a[2]').click()
-sleep(2)
-close =driver.find_element_by_xpath('/html/body/div[12]/div/div/div[3]/button').click()
-
-# add_vi = driver.find_element_by_xpath('//*[@id="uploadBPM"]').click()
-
-
-#
-# scroll_btm =driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[2]/div/div[2]/div[3]/table/thead/tr/th[2]')
-#
-# driver.execute_script("return arguments[0].scrollIntoView(true);",scroll_btm)
-# sleep(10)
-
-
-
-#
-# try:
-#     clk_up_btn = driver.find_element_by_xpath('/html/body/form/div/div/div/label')
-#     clk_up_btn.click()
-#     # insert_ = driver.find_element_by_id('invAttach')
-#     # driver.execute_script("arguments[0].style.display = 'block';",insert_)
-#     # sleep(5)
-#     # insert_.click().perform()
-#     # insert_.send_keys("/path/here")
-# except:
-#     print("cant'nt upload file by id")
-#
-# try:
-#     clk_up_btn = driver.find_element_by_xpath('/html/body/form/div/div/div/label')
-#     clk_up_btn.click().perform()
-# except:
-#     print("cant'nt click upload")
-#
-#
-#
-# try:
-#     insrt_file = driver.find_element_by_xpath('/html/body/form/div/div/div/label/input')
-#     insrt_file.send_keys("/path/here")
-#
-# except:
-#     print("cant'nt upload file by xpath")
-
-
-#this code cabe used to enable hidden file field and upload path of file
-# x=driver.find_element_by_xpath("/html/body/form/div/div/div/label/input")
-# driver.execute_script("arguments[0].style.display = 'block';",x)
-# sleep(5)
-# x.send_keys("C:/Users/B hghgjgjh.jpg")
-
-
-
-
-
-
-
+close_pp = driver.find_element_by_xpath('//*[@id="modalattachDiv"]/div/div/div[3]/button')
+close_pp.click()
 #
 #
 #
