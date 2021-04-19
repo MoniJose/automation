@@ -12,6 +12,8 @@ from selenium.webdriver.common.keys import Keys
 
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
+import urllib
+import urllib.request
 # functions
 
 def check_exists_by_xpath(xpath):
@@ -54,60 +56,118 @@ preauth = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div
 sleep(3)
 
 driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[2]/div/div/div[6]/div/div/div/div/div/div/input').send_keys('DIALYSIS')
-sleep(25)
+sleep(10)
+dialysis = driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/ul/li[1]/span')
+dialysis.click()
+sleep(3)
+
+number_of_rows= len(driver.find_elements_by_xpath('//*[@id="out-table"]/div[1]/div/div[4]/div'))
+
+print(number_of_rows)
+
+id_list=[]# list creation
+for i in range(1,number_of_rows+1):
+    u=driver.find_elements_by_xpath("//*[@id='out-table']/div[1]/div/div[4]/div/div[3]/table/tbody/tr[' + str(i) + ']/td[3]")[0].text
+    print(u)
+    id_list.append(u)
+    sleep(1)
+    # reg_no = driver.find_element_by_xpath(
+    #     '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[3]/div')
+    # reg = reg_no.get_attribute('innerHTML')
+
+    ip_number = driver.find_element_by_xpath(
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[7]/div')
+    ip_num = ip_number.get_attribute('innerHTML')
+    print("ip_num", ip_num)
+    view_profile = driver.find_element_by_xpath(
+        '//*[@id="out-table"]/div[1]/div/div[4]/div/div[4]/div[2]/table/tbody/tr[1]/td[10]/div/button[2]/i')
+    view_profile.click()
+
+    treat_date = driver.find_element_by_xpath(
+        '/html/body/div/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr/td[9]/div')
+    treatment_d = treat_date.get_attribute('innerHTML')
+    print("treatment_d", treatment_d)
+    card_id = driver.find_element_by_xpath(
+        '//*[@id="out-table"]/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[4]/div')
+    card = card_id.get_attribute('innerHTML')
+    print(card)
+    # tmp_rate = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[4]/p[2]')
+    # tmp_rt = tmp_rate.get_attribute('innerattribute')
+    pulse_rate = driver.find_element_by_xpath(
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[3]/p[2]')
+    pulse = pulse_rate.get_attribute('innerHTML')
+    print(pulse)
+    x = pulse[:3]
+    print(x)
+    y = pulse[4:6]
+    print(y)
+
+    # p_p = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
+    # action = ActionChains(driver)
+    # action.context_click(p_p).key_down (Keys.SHIFT).perform()
+    p_chart1 = driver.find_element_by_xpath(
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
+    src1 = p_chart1.get_attribute('src')
+    print(src1)
+
+    p_chart2 = driver.find_element_by_xpath(
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[4]/div/div/div/div[1]/div/div/div/img')
+    src2 = p_chart2.get_attribute('src')
+    print(src2)
+
+    p_patient = driver.find_element_by_xpath(
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
+    src3 = p_patient.get_attribute('src')
+    print(src3)
 
 
-reg_no = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[3]/div')
-reg = reg_no.get_attribute('innerHTML')
-
-ip_number = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[7]/div')
-ip_num = ip_number.get_attribute('innerHTML')
-print("ip_num",ip_num)
-view_profile = driver.find_element_by_xpath('//*[@id="out-table"]/div[1]/div/div[4]/div/div[4]/div[2]/table/tbody/tr[1]/td[10]/div/button[2]/i')
-view_profile.click()
-
-treat_date = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[1]/div/div[1]/div/div[4]/div/div[3]/table/tbody/tr/td[9]/div')
-treatment_d = treat_date.get_attribute('innerHTML')
-print("treatment_d",treatment_d)
-# tmp_rate = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[4]/p[2]')
-# tmp_rt = tmp_rate.get_attribute('innerattribute')
-pulse_rate = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[3]/p[2]')
-pulse = pulse_rate.get_attribute('innerHTML')
-print(pulse)
-x = pulse[:3]
-print(x)
-y = pulse[4:6]
-print(y)
-
-# p_p = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
-# action = ActionChains(driver)
-# action.context_click(p_p).key_down (Keys.SHIFT).perform()
+    def dl_img(url, file_path, file_name):
+        full_path = file_path + file_name + '.jpg'
+        urllib.request.urlretrieve(url, full_path)
 
 
+    url = src1
 
+    file_name = card
 
-
-
+    dl_img(url, r'C:\Users\PC\Desktop/auto', file_name)
 
 driver.get('http://tms.pmjay.gov.in/')
 sleep(5)
-username = driver.find_element_by_xpath('//*[@id="username"]')
-username.send_keys('KER002197')
-pas = driver.find_element_by_xpath('//*[@id="password"]')
-pas.send_keys('Automate@1')
-# driver.find_element_by_xpath('//*[@id="select2-userState-container"]').click()
-driver.find_element_by_xpath('//*[@id="select2-userState-container"]').click()
-driver.find_element_by_xpath('/html/body/span/span/span[1]/input').send_keys('KERALA')
-sleep(1)
-driver.find_element_by_xpath('/html/body/span/span/span[2]/ul/li').click()
-# captcha = input("enter captcha here")
-captcha_text = driver.find_element_by_xpath('//*[@id="reqCaptcha"]')
-captcha_text.click()
-input('Continue?  (Hit enter)')
-driver.find_element_by_id('checkSubmit').click()
-login = driver.find_element_by_xpath('//*[@id="login-submit"]')
-login.click()
-sleep(2)
+
+
+def login_tms():
+    username = driver.find_element_by_xpath('//*[@id="username"]')
+    username.send_keys('KER002197')
+    pas = driver.find_element_by_xpath('//*[@id="password"]')
+    pas.send_keys('Automate@1')
+    # driver.find_element_by_xpath('//*[@id="select2-userState-container"]').click()
+    driver.find_element_by_xpath('//*[@id="select2-userState-container"]').click()
+    driver.find_element_by_xpath('/html/body/span/span/span[1]/input').send_keys('KERALA')
+    sleep(1)
+    driver.find_element_by_xpath('/html/body/span/span/span[2]/ul/li').click()
+    # captcha = input("enter captcha here")
+    captcha_text = driver.find_element_by_xpath('//*[@id="reqCaptcha"]')
+    captcha_text.click()
+    input('Continue?  (Hit enter)')
+    driver.find_element_by_id('checkSubmit').click()
+    login = driver.find_element_by_xpath('//*[@id="login-submit"]')
+    login.click()
+    sleep(2)
+
+
+
+login_tms()
+
+
+# to click on close session if it shows up
+if (check_exists_by_xpath('/html/body/div[10]/div/div/div[3]/button[2]')):
+    driver.find_element_by_xpath('/html/body/div[10]/div/div/div[3]/button[2]').click()
+    sleep(2)
+    driver.find_element_by_xpath('/html/body/div[10]/div/div/div[2]/button').click()
+    sleep(2)
+    login_tms()
+
 
 close = driver.find_element_by_xpath('//*[@id="notificationModal"]/div/div/div[1]/button')
 close.click()
@@ -124,7 +184,7 @@ sleep(2)
 
 driver.switch_to.frame(0)
 regg_no = driver.find_element_by_name('patientNo')
-regg_no.send_keys(reg)
+regg_no.send_keys(id_list)
 
 search = driver.find_element_by_xpath('//*[@id="registeredCases"]/div/div[4]/button[1]')
 search.click()
@@ -200,14 +260,19 @@ try:
     sleep(3)
     driver.switch_to.frame(driver.find_element_by_xpath('//*[@id="iframe1"]'))
     upload = driver.find_element_by_xpath('//*[@id="invAttach"]')
-    upload.send_keys(r'C:\Users\PC\Downloads\gopalakrishna_ss1.jpeg')
+    upload.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx1_MUHAMMEDxASHRAFx_PQOJSD1AC_389_50_23698_20210414_181622_62.jpeg')
     driver.switch_to.default_content()
+    # driver.switch_to.frame(driver.find_element_by_id("middleFrame"))
     sleep(2)
     driver.switch_to.frame(driver.find_element_by_id('iframe2'))
     upload_p = driver.find_element_by_xpath('//*[@id="invattachButton"]')
-    upload_p.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx2_GOPALAKRISHNA.xH.jpeg')
+    upload_p.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx2_MUHAMMEDxASHRAFx_PQOJSD1AC_390_50_23698_20210414_180703_91.jpeg')
 except:
     pass
+
+driver.switch_to.default_content()
+driver.switch_to.frame(driver.find_element_by_id("middleFrame"))
+
 ip_no = driver.find_element_by_xpath('/html/body/div[2]/div[2]/div/div[2]/div[2]/div[1]/input')
 ip_no.send_keys(ip_num)
 
@@ -289,14 +354,12 @@ add_view = driver.find_element_by_id('btnattach')
 add_view.click()
 driver.switch_to.frame(driver.find_element_by_name('btframe'))
 sleep(5)
-driver.find_element_by_xpath('//*[@id="uploadBPM"]').send_keys(r'C:\Users\PC\Downloads\PREDIALYSISxPHOTO_VIJAYAxRAJAN_PBIQUVEX5_99_50_23430_20210410_180416_17.jpeg')
+driver.find_element_by_xpath('//*[@id="uploadBPM"]').send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx1_MUHAMMEDxASHRAFx_PQOJSD1AC_389_50_23698_20210414_181622_62.jpeg')
 sleep(2)
 close_pp = driver.find_element_by_xpath('//*[@id="modalattachDiv"]/div/div/div[3]/button')
 close_pp.click()
 #
 #
-#
-
 
 
 
