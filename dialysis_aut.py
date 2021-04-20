@@ -91,8 +91,10 @@ for i in range(1,number_of_rows+1):
         '//*[@id="out-table"]/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[4]/div')
     card = card_id.get_attribute('innerHTML')
     print(card)
-    # tmp_rate = driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[4]/p[2]')
-    # tmp_rt = tmp_rate.get_attribute('innerattribute')
+    patient_name = driver.find_element_by_xpath('//*[@id="out-table"]/div[1]/div/div[4]/div/div[3]/table/tbody/tr[1]/td[5]/div')
+    p_name = patient_name.get_attribute('innerHTML')
+    print(p_name)
+
     pulse_rate = driver.find_element_by_xpath(
         '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div[3]/p[2]')
     pulse = pulse_rate.get_attribute('innerHTML')
@@ -111,26 +113,55 @@ for i in range(1,number_of_rows+1):
     print(src1)
 
     p_chart2 = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[4]/div/div/div/div[1]/div/div/div/img')
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[3]/div/div/div/div[1]/div/div/div/img')
     src2 = p_chart2.get_attribute('src')
     print(src2)
 
     p_patient = driver.find_element_by_xpath(
-        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[2]/div/div/div/div[1]/div/div/div/img')
+        '/html/body/div[1]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[6]/div/div/div/div[4]/div/div/div/div[1]/div/div/div/img')
     src3 = p_patient.get_attribute('src')
     print(src3)
 
-
     def dl_img(url, file_path, file_name):
-        full_path = file_path + file_name + '.jpg'
-        urllib.request.urlretrieve(url, full_path)
+        filename = file_name+".jpeg"
+        fullfilename = os.path.join(file_path, filename)
+        # urllib.urlretrieve(url, fullfilename)
+        urllib.request.urlretrieve(url, fullfilename)
 
 
+
+    #
+    # def dl_img(url, file_path, file_name):
+    #     full_path = file_path + file_name + '.jpg'
+    #     urllib.request.urlretrieve(url, full_path)
+    #
+    #
     url = src1
 
     file_name = card
 
-    dl_img(url, r'C:\Users\PC\Desktop/auto', file_name)
+    dl_img(url, r'C:\Users\PC\Desktop\auto', file_name)
+
+
+    # def dl_img(url, file_path, file_name):
+    #     full_path = file_path + file_name + '.jpg'
+    #     urllib.request.urlretrieve(url, full_path)
+
+
+    url = src2
+
+    file_name = card
+
+    dl_img(url, r'C:\Users\PC\Desktop\certificate', file_name)
+    sleep(2)
+
+    url = src3
+
+    file_name = card
+
+    dl_img(url, r'C:\Users\PC\Desktop\chart', file_name)
+    sleep(3)
+
 
 driver.get('http://tms.pmjay.gov.in/')
 sleep(5)
@@ -244,7 +275,8 @@ try:
     add_pro.click()
     sleep(2)
 
-    ok = driver.find_element_by_xpath('/html/body/div[25]/div/div/div[2]/button')
+    ok =w.until(
+        expected_conditions.presence_of_element_located((By.XPATH, '/html/body/div[26]/div/div/div[2]/button')))
     ok.click()
     sleep(2)
 
@@ -253,6 +285,7 @@ except:
 
 
 try:
+
     close_b = w.until(
         expected_conditions.presence_of_element_located((By.XPATH, '/html/body/div[18]/div/div/div[3]/button')))
 
@@ -260,13 +293,21 @@ try:
     sleep(3)
     driver.switch_to.frame(driver.find_element_by_xpath('//*[@id="iframe1"]'))
     upload = driver.find_element_by_xpath('//*[@id="invAttach"]')
-    upload.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx1_MUHAMMEDxASHRAFx_PQOJSD1AC_389_50_23698_20210414_181622_62.jpeg')
+    # path = os.path.join(r'C:\Users\PC\Desktop\certificate+' card '+.jpeg')
+    # upload.send_keys(path)
+    file_path =r'C:\Users\PC\Desktop\certificate'
+    filename = card + ".jpeg"
+    fullfilename = os.path.join(file_path, filename)
+    # urllib.urlretrieve(url, fullfilename)
     driver.switch_to.default_content()
     # driver.switch_to.frame(driver.find_element_by_id("middleFrame"))
     sleep(2)
+
+
+
     driver.switch_to.frame(driver.find_element_by_id('iframe2'))
     upload_p = driver.find_element_by_xpath('//*[@id="invattachButton"]')
-    upload_p.send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx2_MUHAMMEDxASHRAFx_PQOJSD1AC_390_50_23698_20210414_180703_91.jpeg')
+    upload_p.send_keys(r'C:\Users\PC\Desktop\chart\card.jpeg')
 except:
     pass
 
@@ -327,16 +368,18 @@ pulse.click()
 #sleep(2)
 pulse_r = driver.find_element_by_xpath('/html/body/div[8]/div/div/div[2]/form/div[2]/div/div/div[2]/div[1]/div[12]/div[2]/input')
 pulse_r.send_keys(78)
-#sleep(1)
+sleep(1)
 driver.find_element_by_xpath('/html/body/div[8]/div/div/div[2]/form/div[2]/div/div/div[2]/div[1]/div[14]/div[1]/input').click()
 bp = driver.find_element_by_name('GE14')
 bp.send_keys(x)
-#sleep(2)
+sleep(2)
 bp_h = driver.find_element_by_name('BP1')
 bp_h.send_keys(y)
-#sleep(5)
-save_k = driver.find_element_by_xpath('/html/body/div[8]/div/div/div[2]/form/div[2]/div/div/div[2]/div[2]/button')
-save_k.click()
+sleep(5)
+w.until(
+        expected_conditions.presence_of_element_located((By.XPATH, '//*[@id="generalExamsfindings"]/div[2]/button')))
+
+
 sleep(5)
 save_ok = driver.find_element_by_xpath('/html/body/div[26]/div/div/div[2]/button')
 save_ok.click()
@@ -354,7 +397,7 @@ add_view = driver.find_element_by_id('btnattach')
 add_view.click()
 driver.switch_to.frame(driver.find_element_by_name('btframe'))
 sleep(5)
-driver.find_element_by_xpath('//*[@id="uploadBPM"]').send_keys(r'C:\Users\PC\Downloads\DIALYSISxSHEETx1_MUHAMMEDxASHRAFx_PQOJSD1AC_389_50_23698_20210414_181622_62.jpeg')
+driver.find_element_by_xpath('//*[@id="uploadBPM"]').send_keys(r'C:\Users\PC\Desktop\auto+card.jpeg')
 sleep(2)
 close_pp = driver.find_element_by_xpath('//*[@id="modalattachDiv"]/div/div/div[3]/button')
 close_pp.click()
